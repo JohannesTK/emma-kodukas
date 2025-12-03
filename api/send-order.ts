@@ -77,7 +77,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Send email to shop owner
     const { error: ownerError } = await resend.emails.send({
-      from: 'Toidukodu <onboarding@resend.dev>',
+      from: 'Toidukodu <noreply@toidukodu.com>',
       to: ['emmaleena.niitvahi@gmail.com'],
       replyTo: email,
       subject: `[Toidukodu] Uus tellimus ${orderNumber}`,
@@ -129,7 +129,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Send confirmation email to customer
     const { error: customerError } = await resend.emails.send({
-      from: 'Toidukodu <onboarding@resend.dev>',
+      from: 'Toidukodu <noreply@toidukodu.com>',
       to: [email],
       subject: `Tellimuse kinnitus - ${orderNumber}`,
       html: `
