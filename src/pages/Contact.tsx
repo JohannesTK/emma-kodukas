@@ -60,6 +60,13 @@ const Contact = () => {
       <section style={styles.section}>
         <div style={styles.container}>
           <div style={styles.intro}>
+            <div style={styles.contactImageWrapper}>
+              <img
+                src="/images/contact.png"
+                alt="Emma-Leena"
+                style={styles.contactImage}
+              />
+            </div>
             <p style={styles.introText}>
               See, et elu on Sind siia juhatanud, tähendab mulle väga palju. Iga
               tagasiside ja mõte aitavad Toidukodul saada veel hubasemaks ning jõuda
@@ -336,6 +343,17 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 'var(--text-xl)',
     color: 'var(--color-primary)',
     margin: 0,
+  },
+  contactImageWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: 'var(--space-8)',
+  },
+  contactImage: {
+    maxWidth: '100%',
+    maxHeight: '400px',
+    objectFit: 'contain',
+    borderRadius: 'var(--radius-lg)',
   },
   grid: {
     display: 'grid',
