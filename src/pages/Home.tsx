@@ -183,6 +183,24 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Tehiskokk Promo */}
+      <section style={styles.tehiskokkSection}>
+        <div style={styles.tehiskokkContainer}>
+          <div style={styles.tehiskokkContent}>
+            <span style={styles.tehiskokkLabel}>Proovi uut</span>
+            <h2 style={styles.tehiskokkTitle}>Tehiskokk</h2>
+            <p style={styles.tehiskokkSubtitle}>Sinu isiklik AI toidunõustaja</p>
+            <p style={styles.tehiskokkDescription}>
+              Räägi mulle oma toidueelistustest ja koostan Sulle personaalse toidukava!
+              Treenitud Emma-Leena toidufilosoofia järgi.
+            </p>
+            <Link to="/tehiskokk" className="btn btn-primary">
+              Proovi tehiskokka
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Newsletter */}
       <NewsletterSignup />
 
@@ -396,6 +414,48 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 'var(--text-lg)',
     color: 'var(--color-primary)',
     margin: 0,
+  },
+  tehiskokkSection: {
+    padding: 'var(--space-16) 0',
+    backgroundColor: 'var(--color-background-alt)',
+  },
+  tehiskokkContainer: {
+    maxWidth: '600px',
+    margin: '0 auto',
+    padding: '0 var(--space-6)',
+    textAlign: 'center',
+  },
+  tehiskokkContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 'var(--space-4)',
+  },
+  tehiskokkLabel: {
+    fontFamily: 'var(--font-heading)',
+    fontStyle: 'italic',
+    fontSize: 'var(--text-lg)',
+    color: 'var(--color-primary)',
+    display: 'block',
+  },
+  tehiskokkTitle: {
+    fontFamily: 'var(--font-heading)',
+    fontSize: 'var(--text-3xl)',
+    fontWeight: 500,
+    color: 'var(--color-text)',
+    margin: 0,
+  },
+  tehiskokkSubtitle: {
+    fontSize: 'var(--text-lg)',
+    color: 'var(--color-text-light)',
+    margin: 0,
+  },
+  tehiskokkDescription: {
+    fontSize: 'var(--text-base)',
+    color: 'var(--color-text-light)',
+    lineHeight: 1.7,
+    maxWidth: '500px',
+    margin: '0 0 var(--space-4) 0',
   },
 };
 

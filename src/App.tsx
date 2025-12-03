@@ -9,6 +9,7 @@ import Recipes from './pages/Recipes';
 import RecipeDetail from './pages/RecipeDetail';
 import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
+import Tehiskokk from './pages/Tehiskokk';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/retseptid/:id" element={<RecipeDetail />} />
             <Route path="/pood" element={<Shop />} />
             <Route path="/pood/:id" element={<ProductDetail />} />
+            <Route path="/tehiskokk" element={<Tehiskokk />} />
           </Routes>
         </Layout>
       </BrowserRouter>

@@ -10,6 +10,7 @@ const Header = () => {
     { to: '/', label: 'Avaleht' },
     { to: '/retseptid', label: 'Retseptid' },
     { to: '/pood', label: 'Pood' },
+    { to: '/tehiskokk', label: 'Tehiskokk' },
     { to: '/minust', label: 'Minust' },
     { to: '/kontakt', label: 'Kontakt' },
   ];
