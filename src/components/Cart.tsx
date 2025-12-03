@@ -23,6 +23,9 @@ const Cart = () => {
 
   const [isCheckout, setIsCheckout] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [orderNumber, setOrderNumber] = useState<string | null>(null);
 
   const {
     register,
@@ -32,48 +35,52 @@ const Cart = () => {
   } = useForm<OrderForm>();
 
   const onSubmit = async (data: OrderForm) => {
-    // Format the order for email
-    const orderDetails = items
-      .map(
-        (item) =>
-          `${item.product.name} x ${item.quantity} - ${(
-            item.product.price * item.quantity
-          ).toFixed(2)}€`
-      )
-      .join('\n');
+    setIsSubmitting(true);
+    setSubmitError(null);
 
-    const emailBody = `
-Uus tellimus Toidukodust!
+    try {
+      const orderData = {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        address: data.address,
+        notes: data.notes,
+        items: items.map((item) => ({
+          name: item.product.name,
+          quantity: item.quantity,
+          price: item.product.price,
+        })),
+        total: totalPrice,
+      };
 
-Kliendi andmed:
-Nimi: ${data.name}
-E-post: ${data.email}
-Telefon: ${data.phone}
-Aadress: ${data.address}
+      const response = await fetch('/api/send-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData),
+      });
 
-Tellimus:
-${orderDetails}
+      const result = await response.json();
 
-Kokku: ${totalPrice.toFixed(2)}€
+      if (!response.ok) {
+        throw new Error(result.error || 'Midagi läks valesti');
+      }
 
-Märkused: ${data.notes || 'Puuduvad'}
-    `.trim();
+      setOrderNumber(result.orderNumber);
+      setIsSubmitted(true);
 
-    // Open email client with pre-filled details
-    const mailtoLink = `mailto:emmaleena.niitvahi@gmail.com?subject=Uus tellimus Toidukodust&body=${encodeURIComponent(
-      emailBody
-    )}`;
-
-    window.location.href = mailtoLink;
-
-    setIsSubmitted(true);
-    setTimeout(() => {
-      clearCart();
-      reset();
-      setIsCheckout(false);
-      setIsSubmitted(false);
-      closeCart();
-    }, 3000);
+      setTimeout(() => {
+        clearCart();
+        reset();
+        setIsCheckout(false);
+        setIsSubmitted(false);
+        setOrderNumber(null);
+        closeCart();
+      }, 5000);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Midagi läks valesti. Proovi hiljem uuesti.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -115,8 +122,11 @@ Märkused: ${data.notes || 'Puuduvad'}
               <polyline points="22 4 12 14.01 9 11.01" />
             </svg>
             <h3 style={styles.successTitle}>Täname tellimuse eest!</h3>
+            {orderNumber && (
+              <p style={styles.orderNumber}>Tellimuse number: {orderNumber}</p>
+            )}
             <p style={styles.successText}>
-              Tellimuse andmed saadetakse e-postile. Võtame Sinuga peagi ühendust!
+              Saatsime kinnituse Sinu e-postile. Võtame peagi ühendust!
             </p>
           </div>
         ) : items.length === 0 ? (
@@ -191,16 +201,40 @@ Märkused: ${data.notes || 'Puuduvad'}
               <strong>Tellimus kokku: {totalPrice.toFixed(2)}€</strong>
             </div>
 
+            {submitError && (
+              <div style={styles.errorMessage} role="alert">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <span>{submitError}</span>
+              </div>
+            )}
+
             <div style={styles.actions}>
               <button
                 type="button"
                 onClick={() => setIsCheckout(false)}
                 className="btn btn-secondary"
+                disabled={isSubmitting}
               >
                 Tagasi
               </button>
-              <button type="submit" className="btn btn-primary">
-                Saada tellimus
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={isSubmitting}
+                style={{ opacity: isSubmitting ? 0.7 : 1 }}
+              >
+                {isSubmitting ? 'Saadan...' : 'Saada tellimus'}
               </button>
             </div>
           </form>
@@ -455,6 +489,22 @@ const styles: Record<string, React.CSSProperties> = {
   successText: {
     color: 'var(--color-text-light)',
     margin: 0,
+  },
+  orderNumber: {
+    fontWeight: 600,
+    color: 'var(--color-primary)',
+    margin: 0,
+  },
+  errorMessage: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'var(--space-2)',
+    padding: 'var(--space-3) var(--space-4)',
+    backgroundColor: '#FEF2F2',
+    color: 'var(--color-error)',
+    borderRadius: 'var(--radius-md)',
+    fontSize: 'var(--text-sm)',
+    marginBottom: 'var(--space-4)',
   },
 };
 
