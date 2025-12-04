@@ -46,7 +46,7 @@ export const recipes: Recipe[] = [
         title: 'Põhi',
         items: [
           '200g mandlijahu',
-          '100g kookosõli',
+          '150g mett',
           '3 spl vahtrасiirupit',
           '1 tl vanilliekstrakti',
           'Näpuots soola',
